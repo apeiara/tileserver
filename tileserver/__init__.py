@@ -42,6 +42,10 @@ RequestData = namedtuple('RequestData', 'layer_spec coord format')
 def parse_request_path(path, extensions_to_handle):
     """given a path, parse the underlying layer, coordinate, and format"""
     parts = path.split('/')
+
+    if parts[1] == "changeset-id":
+        return enqueue_expired_changeset(parts[2])
+
     if len(parts) != 5:
         return None
     _, layer_spec, zoom_str, column_str, row_and_ext = parts
@@ -165,6 +169,13 @@ def reformat_selected_layers(
                        bounds_merc, bounds_lnglat)
     tile_data = tile_data_file.getvalue()
     return tile_data
+
+
+def enqueue_expired_changeset(id):
+    f = open('../update-tiles/changesets/'+id,'w')
+    f.write('') # python will convert \n to os.linesep
+    f.close() # you can omit in most cases as the destructor will call it
+    return None
 
 
 class TileServer(object):
