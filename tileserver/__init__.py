@@ -172,7 +172,7 @@ def reformat_selected_layers(
 
 
 def enqueue_expired_changeset(id):
-    f = open('../update-tiles/changesets/'+id,'w')
+    f = open('../update-tiles/changeset-ids/'+id,'w')
     f.write('') # python will convert \n to os.linesep
     f.close() # you can omit in most cases as the destructor will call it
     return None
